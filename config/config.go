@@ -12,9 +12,9 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/infiotinc/gqlgenc/client"
-	"github.com/infiotinc/gqlgenc/client/transport"
-	"github.com/infiotinc/gqlgenc/introspection"
+	"github.com/Hvitgar/gqlgenc/client"
+	"github.com/Hvitgar/gqlgenc/client/transport"
+	"github.com/Hvitgar/gqlgenc/introspection"
 
 	"github.com/99designs/gqlgen/codegen/config"
 	"github.com/vektah/gqlparser/v2"

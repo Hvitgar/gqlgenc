@@ -5,7 +5,7 @@ package generator
 import (
 	"context"
 	"fmt"
-	"github.com/infiotinc/gqlgenc/config"
+	"github.com/Hvitgar/gqlgenc/config"
 
 	"github.com/99designs/gqlgen/api"
 	"github.com/99designs/gqlgen/plugin"

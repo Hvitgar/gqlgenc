@@ -3,7 +3,7 @@ package client
 import (
 	"context"
 	"fmt"
-	"github.com/infiotinc/gqlgenc/client/transport"
+	"github.com/Hvitgar/gqlgenc/client/transport"
 )
 
 type extensions struct {

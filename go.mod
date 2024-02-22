@@ -1,4 +1,4 @@
-module github.com/infiotinc/gqlgenc
+module github.com/Hvitgar/gqlgenc
 
 go 1.15
 

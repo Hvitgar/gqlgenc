@@ -5,7 +5,7 @@ import (
 
 	gqlgenCfg "github.com/99designs/gqlgen/codegen/config"
 	"github.com/99designs/gqlgen/plugin"
-	"github.com/infiotinc/gqlgenc/config"
+	"github.com/Hvitgar/gqlgenc/config"
 )
 
 var _ plugin.ConfigMutator = &Plugin{}

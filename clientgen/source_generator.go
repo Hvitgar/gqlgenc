@@ -2,14 +2,15 @@ package clientgen
 
 import (
 	"fmt"
-	"github.com/99designs/gqlgen/codegen/config"
-	"github.com/99designs/gqlgen/codegen/templates"
-	config2 "github.com/Hvitgar/gqlgenc/config"
-	"github.com/vektah/gqlparser/v2/ast"
 	"go/types"
 	"math"
 	"sort"
 	"strings"
+
+	"github.com/99designs/gqlgen/codegen/config"
+	"github.com/99designs/gqlgen/codegen/templates"
+	config2 "github.com/Hvitgar/gqlgenc/config"
+	"github.com/vektah/gqlparser/v2/ast"
 )
 
 type FieldPath struct {
@@ -243,7 +244,6 @@ func (r *SourceGenerator) namedType(path FieldPath, gen func() types.Type) types
 
 	if r.cfg.Models.Exists(fullname) && len(r.cfg.Models[fullname].Model) > 0 {
 		model := r.cfg.Models[fullname].Model[0]
-		fmt.Printf("%s is already declared: %v\n", fullname, model)
 
 		typ, err := r.binder.FindTypeFromName(model)
 		if err != nil {

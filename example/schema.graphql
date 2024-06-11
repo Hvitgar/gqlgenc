@@ -156,3 +156,15 @@ enum FooType_hash1 {
   hash_1
   hash_2
 }
+
+# reproduction for https://github.com/Hvitgar/gqlgenc/issues/2
+scalar Decimal
+scalar BasicInt
+input Issue2Input {
+  value: Decimal
+  intValue: BasicInt
+}
+
+extend type Mutation {
+  issue2(inp: Issue2Input!): Boolean
+}

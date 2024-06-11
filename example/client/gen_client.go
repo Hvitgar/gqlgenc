@@ -6,9 +6,11 @@ import (
 	"context"
 	"encoding/json"
 	"example/somelib"
+	"math/big"
 
 	"github.com/Hvitgar/gqlgenc/client"
 	"github.com/Hvitgar/gqlgenc/client/transport"
+	"github.com/shopspring/decimal"
 )
 
 type IClient interface {
@@ -29,6 +31,7 @@ type IClient interface {
 	AsMap(ctх context.Context, req AsMapInput, opt *AsMapInput) (*AsMap, transport.OperationResponse, error)
 	OptValue1(ctх context.Context, v OptionalValue1) (*OptValue1, transport.OperationResponse, error)
 	OptValue2(ctх context.Context, v *OptionalValue2) (*OptValue2, transport.OperationResponse, error)
+	DuplicateDefs(ctх context.Context, inp Issue2Input) (*DuplicateDefs, transport.OperationResponse, error)
 }
 
 var _ IClient = (*Client)(nil)
@@ -106,6 +109,11 @@ type Cyclic2_1 struct {
 type Cyclic2_2 struct {
 	ID    string     "json:\"id\""
 	Child *Cyclic2_1 "json:\"child\""
+}
+
+// OPERATION: DuplicateDefs
+type DuplicateDefs struct {
+	Issue2 *bool "json:\"issue2\""
 }
 
 // ENUM: Episode
@@ -267,6 +275,12 @@ type GetRoomNonNull_RoomNonNull struct {
 	Name string "json:\"name\""
 }
 
+// INPUT_OBJECT: Issue2Input
+type Issue2Input struct {
+	Value    *decimal.Decimal "json:\"value\""
+	IntValue *int             "json:\"intValue\""
+}
+
 // OPERATION: Issue8
 type Issue8 struct {
 	Issue8 *Issue8_Issue8 "json:\"issue8\""
@@ -397,7 +411,13 @@ type UploadFilesMapInput struct {
 func AsMapInputPtr(v AsMapInput) *AsMapInput {
 	return &v
 }
+func DecimalPtr(v decimal.Decimal) *decimal.Decimal {
+	return &v
+}
 func EpisodePtr(v Episode) *Episode {
+	return &v
+}
+func IntPtr(v big.Int) *big.Int {
 	return &v
 }
 func OptionalValue2Ptr(v OptionalValue2) *OptionalValue2 {
@@ -407,6 +427,9 @@ func Value1Ptr(v Value1) *Value1 {
 	return &v
 }
 func Value2Ptr(v Value2) *Value2 {
+	return &v
+}
+func IntPtr(v int) *int {
 	return &v
 }
 func StringPtr(v string) *string {
@@ -843,6 +866,27 @@ func (Ξc *Client) OptValue2(ctх context.Context, v *OptionalValue2) (*OptValue
 	{
 		var data OptValue2
 		res, err := Ξc.Client.Query(ctх, "OptValue2", OptValue2Document, Ξvars, &data)
+		if err != nil {
+			return nil, transport.OperationResponse{}, err
+		}
+
+		return &data, res, nil
+	}
+}
+
+const DuplicateDefsDocument = `mutation DuplicateDefs ($inp: Issue2Input!) {
+	issue2(inp: $inp)
+}
+`
+
+func (Ξc *Client) DuplicateDefs(ctх context.Context, inp Issue2Input) (*DuplicateDefs, transport.OperationResponse, error) {
+	Ξvars := map[string]interface{}{
+		"inp": inp,
+	}
+
+	{
+		var data DuplicateDefs
+		res, err := Ξc.Client.Mutation(ctх, "DuplicateDefs", DuplicateDefsDocument, Ξvars, &data)
 		if err != nil {
 			return nil, transport.OperationResponse{}, err
 		}

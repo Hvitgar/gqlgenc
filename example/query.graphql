@@ -125,3 +125,8 @@ query OptValue1($v: OptionalValue1!) {
 query OptValue2($v: OptionalValue2) {
   optValue2(opt: $v)
 }
+
+# reproduction for https://github.com/Hvitgar/gqlgenc/issues/2
+mutation DuplicateDefs($inp: Issue2Input!) {
+  issue2(inp: $inp)
+}

@@ -19,6 +19,10 @@ models:
     model: example/client.Value1
   Value2:
     model: example/client.Value2
+  Decimal:
+    model: github.com/shopspring/decimal.Decimal
+  BasicInt:
+    model: github.com/99designs/gqlgen/graphql.Int
 schema:
   - schema.graphql
 query:

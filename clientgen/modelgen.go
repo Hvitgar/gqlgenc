@@ -2,10 +2,11 @@ package clientgen
 
 import (
 	"fmt"
-	"github.com/99designs/gqlgen/codegen/templates"
-	"github.com/vektah/gqlparser/v2/ast"
 	"go/constant"
 	"go/types"
+
+	"github.com/99designs/gqlgen/codegen/templates"
+	"github.com/vektah/gqlparser/v2/ast"
 )
 
 func (r *SourceGenerator) genFromDefinition(def *ast.Definition) types.Type {

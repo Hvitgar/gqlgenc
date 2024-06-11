@@ -12,10 +12,10 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/extension"
 	htransport "github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/gorilla/websocket"
 	"github.com/Hvitgar/gqlgenc/client"
 	"github.com/Hvitgar/gqlgenc/client/extensions"
 	"github.com/Hvitgar/gqlgenc/client/transport"
+	"github.com/gorilla/websocket"
 	"net/http"
 	_ "net/http/pprof" // Register the pprof handlers
 	"runtime"

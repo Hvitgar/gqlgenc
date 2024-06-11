@@ -5,7 +5,7 @@ import (
 )
 
 type (
-	Extension interface{
+	Extension interface {
 		ExtensionName() string
 	}
 
@@ -15,4 +15,3 @@ type (
 		AroundRequest(req transport.Request, next RequestHandler) transport.Response
 	}
 )
-

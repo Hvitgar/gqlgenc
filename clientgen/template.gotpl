@@ -8,10 +8,12 @@ type IClient interface {
         {{- end }}
     {{- end }}
 }
+{{- if .GenerateClient }}
 var _ IClient = (*Client)(nil)
 {{- end }}
+{{- end }}
 
-{{- if .GenerateClient }}
+{{- if or .GenerateClient .GenerateInterface }}
 	{{ reserveImport "bytes" }}
 	{{ reserveImport "context" }}
 	{{ reserveImport "encoding/json" }}
@@ -22,7 +24,9 @@ var _ IClient = (*Client)(nil)
 	{{ reserveImport "net/url" }}
 	{{ reserveImport "path" }}
 	{{ reserveImport "time" }}
+{{- end }}
 
+{{- if .GenerateClient }}
 	{{ reserveImport "github.com/Hvitgar/gqlgenc/client" }}
 	{{ reserveImport "github.com/Hvitgar/gqlgenc/client/transport" }}
 
@@ -104,14 +108,16 @@ var _ IClient = (*Client)(nil)
 {{- range $op := .Operations }}
 	const {{ $op.Name|go }}Document = `{{ $op.Operation }}`
 
-	{{- if $.GenerateClient }}
-        {{- if eq $op.OperationType "subscription" }}
+    {{- if eq $op.OperationType "subscription" }}
+        {{- if or $.GenerateClient $.GenerateInterface }}
             type Message{{ $op.Name|go }} struct {
                 Data       *{{ $op.ResponseType | ref }}
                 Error      error
                 Extensions transport.RawExtensions
             }
+        {{- end }}
 
+        {{- if $.GenerateClient }}
             func (Ξc *Client) {{ $op.Name|go }} (ctх context.Context{{- range $arg := .Args }}, {{ $arg.Variable | goPrivate }} {{ $arg.Type | ref }} {{- end }}) (<-chan Message{{ $op.Name|go }}, func()) {
                 Ξvars := map[string]interface{}{
                 {{- range $args := .VariableDefinitions}}
@@ -154,7 +160,9 @@ var _ IClient = (*Client)(nil)
                     return ch, res.Close
                 }
             }
-        {{- else}}
+        {{- end }}
+    {{- else}}
+        {{- if $.GenerateClient }}
             func (Ξc *Client) {{ $op.Name|go }} (ctх context.Context{{- range $arg := .Args }}, {{ $arg.Variable | goPrivate }} {{ $arg.Type | ref }} {{- end }}) (*{{ $op.ResponseType | ref }}, transport.OperationResponse, error) {
                 Ξvars := map[string]interface{}{
                 {{- range $args := .VariableDefinitions}}
@@ -173,5 +181,5 @@ var _ IClient = (*Client)(nil)
                 }
             }
         {{- end}}
-	{{- end}}
+    {{- end}}
 {{- end}}

@@ -282,7 +282,7 @@ func (r *SourceGenerator) genFromResponseFields(path FieldPath, fieldsResponseFi
 			typ = types.NewPointer(typ)
 		}
 
-		vars = append(vars, types.NewVar(0, nil, fieldName, typ))
+		vars = append(vars, types.NewField(0, nil, fieldName, typ, len(field.Tags) == 0))
 		tags = append(tags, strings.Join(field.Tags, " "))
 	}
 

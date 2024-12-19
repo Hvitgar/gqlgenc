@@ -14,6 +14,7 @@ import (
 type IClient interface {
 	GetRoom(ctх context.Context, name string) (*GetRoom, transport.OperationResponse, error)
 	GetRoomNonNull(ctх context.Context, name string) (*GetRoomNonNull, transport.OperationResponse, error)
+	GetWrappedFragment(ctх context.Context, name string) (*GetWrappedFragment, transport.OperationResponse, error)
 	GetRoomFragment(ctх context.Context, name string) (*GetRoomFragment, transport.OperationResponse, error)
 	GetRoomCustom(ctх context.Context, name string) (*somelib.CustomRoom, transport.OperationResponse, error)
 	GetMedias(ctх context.Context) (*GetMedias, transport.OperationResponse, error)
@@ -267,6 +268,11 @@ type GetRoomNonNull_RoomNonNull struct {
 	Name string "json:\"name\""
 }
 
+// OPERATION: GetWrappedFragment
+type GetWrappedFragment struct {
+	Room *Wrapped "json:\"room\""
+}
+
 // OPERATION: Issue8
 type Issue8 struct {
 	Issue8 *Issue8_Issue8 "json:\"issue8\""
@@ -393,6 +399,12 @@ type UploadFilesMapInput struct {
 	Somefile transport.Upload "json:\"somefile\""
 }
 
+// OBJECT: Wrapped
+type Wrapped struct {
+	Hash *FooTypeHash1 "json:\"hash\""
+	RoomFragment
+}
+
 // Pointer helpers
 func AsMapInputPtr(v AsMapInput) *AsMapInput {
 	return &v
@@ -452,6 +464,36 @@ func (Ξc *Client) GetRoomNonNull(ctх context.Context, name string) (*GetRoomNo
 	{
 		var data GetRoomNonNull
 		res, err := Ξc.Client.Query(ctх, "GetRoomNonNull", GetRoomNonNullDocument, Ξvars, &data)
+		if err != nil {
+			return nil, transport.OperationResponse{}, err
+		}
+
+		return &data, res, nil
+	}
+}
+
+const GetWrappedFragmentDocument = `query GetWrappedFragment ($name: String!) {
+	room(name: $name) {
+		... Wrapped
+	}
+}
+fragment Wrapped on Chatroom {
+	hash
+	... RoomFragment
+}
+fragment RoomFragment on Chatroom {
+	name
+}
+`
+
+func (Ξc *Client) GetWrappedFragment(ctх context.Context, name string) (*GetWrappedFragment, transport.OperationResponse, error) {
+	Ξvars := map[string]interface{}{
+		"name": name,
+	}
+
+	{
+		var data GetWrappedFragment
+		res, err := Ξc.Client.Query(ctх, "GetWrappedFragment", GetWrappedFragmentDocument, Ξvars, &data)
 		if err != nil {
 			return nil, transport.OperationResponse{}, err
 		}
